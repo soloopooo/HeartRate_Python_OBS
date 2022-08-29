@@ -20,7 +20,7 @@ Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 
 All Right.
 
-## How to make your own visuable html:
+## How to make your own visualble html:
 
 Write your html in `Pyscripts/www`. The api is http://127.0.0.1:8919/api/hr_json.
 
