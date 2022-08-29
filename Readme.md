@@ -1,5 +1,7 @@
 ## Web HeartMonitor on windows.
 
+[简体中文文档](Readme.Zh_cn.md)
+
 Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 
 ## Running
