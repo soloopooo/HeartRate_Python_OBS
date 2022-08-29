@@ -21,3 +21,17 @@ Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 5. Open http://127.0.0.1:8919.
 
 All Right.
+
+## How to make your own visualble html:
+
+Write your html in `Pyscripts/www`. The api is http://127.0.0.1:8919/api/hr_json.
+
+You can add js files in `Pyscripts/js`.
+
+These file will be automatically mounted while the server runs.
+
+Open http://127.0.0.1:8919/{yourhtmlname}.html to see it.
+
+## Asking for help
+
+Maybe we can use websocket?
