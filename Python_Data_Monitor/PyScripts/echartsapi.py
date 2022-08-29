@@ -12,7 +12,7 @@ import re
   
 
 def udp_conn(ip:str,port:int) -> None:
-    dat = shared_memory.SharedMemory(name='udpData',create=True,size = 64)
+    dat = shared_memory.SharedMemory(name='udpData',create=True,size = 8192)
     dat_buf = dat.buf
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -20,9 +20,16 @@ def udp_conn(ip:str,port:int) -> None:
     udp_socket.bind(addr)
     udp_socket.settimeout(3)
     while True:
-        recv_data, client_addr = udp_socket.recvfrom(1024)
-        length = len(recv_data)
-        dat_buf[0:length] = recv_data
+        try:
+            recv_data, client_addr = udp_socket.recvfrom(1024)
+            length = len(recv_data)
+            dat_buf[0:length] = recv_data
+        except Exception:
+            pass
+        except KeyboardInterrupt:
+            break
+        except:
+            pass
         #udp_socket.close()
     #print ("{:s} <- {:s}".format(recv_data.decode('utf-8'), str(client_addr)))
 
@@ -50,11 +57,16 @@ def hr_js():
     ddict[k_l[0]]=timenow
     i=0
     leng=len(dlist)
-    while i<leng:
-        ddict[k_l[i+1]]=dlist[i]
-        i+=1
+    if leng>5:
+        leng=5 # Prevent OutIndex.
+    try:
+        while i<5:
+            ddict[k_l[i+1]]=dlist[i]
+            i+=1
+    except Exception:
+        i = 0
     return ddict
-
+'''
 @app.get("/",response_class=HTMLResponse)
 def main():
     html_main = open('www\\index.html','r').read()
@@ -67,26 +79,13 @@ def speedo():
 def spline():
     html_spline = open('www\\spline.html','r').read()
     return html_spline
-
-app.mount("/js", StaticFiles(directory="www\\js"), name="js")  
+'''
+app.mount("/js", StaticFiles(directory="www\\js"), name="js")
+app.mount("/", StaticFiles(directory="www\\html",html=True), name="html")
 
 class Server(uvicorn.Server):
     def install_signal_handlers(self):
         pass
-
-    @contextlib.contextmanager
-    def run_in_process(self):
-        processb = Process(target=self.run)
-        processb.start()
-        try:
-            while not self.started:
-                time.sleep(1e-3)
-            yield
-        finally:
-            dat = shared_memory.SharedMemory(name="udpData")
-            dat.close()
-            self.should_exit = True
-            processb.join()
 
 config = uvicorn.Config("echartsapi:app", host="127.0.0.1", port=8919, log_level="info")
 server = Server(config=config)
