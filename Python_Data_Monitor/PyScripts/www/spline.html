@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Highcharts Example</title>
+
+		<style type="text/css">
+.highcharts-figure,
+.highcharts-data-table table {
+    min-width: 320px;
+    max-width: 1300px;
+    height:100%;
+    margin: 1em auto;
+}
+
+#container {
+    height: 100%;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+
+		</style>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+<script src="js/jquery.min.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+</figure>
+
+
+
+		<script type="text/javascript">
+Highcharts.chart('container', {
+    plotOptions: {
+        series: {
+            lineWidth: 3.3,
+            marker: {
+                radius: 3.0,
+            }
+        }
+    },
+    chart: {
+        type: 'spline',
+        renderTo: name,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        height:'85px',
+        plotBorderColor : null,
+        plotBackgroundColor: null,
+        plotBackgroundImage:null,
+        plotBorderWidth: null,
+        plotShadow: false,  
+        animation: Highcharts.svg, // don't animate in old IE
+        marginRight: 10,
+        events: {
+            load: function () {
+                var hr_bpm;
+                // set up the updating of the chart each second
+                var series = this.series[0];
+                setInterval(function () {
+                    $.getJSON("http://127.0.0.1:8919/api/hr_json",function(data){
+                        hr_bpm=data.hr;
+                    })
+                    var x = (new Date()).getTime(), // current time
+                        y = parseInt(hr_bpm);
+                        console.log(hr_bpm)
+                    series.addPoint([x, y], true, true);
+                }, 400);
+            }
+        }
+    },
+    
+    time: {
+        useUTC: false
+    },
+
+    title: {
+        text: ''
+    },
+
+    accessibility: {
+        announceNewData: {
+            enabled: true,
+            minAnnounceInterval: 15000,
+            announcementFormatter: function (allSeries, newSeries, newPoint) {
+                if (newPoint) {
+                    return 'New point added. Value: ' + newPoint.y;
+                }
+                return false;
+            }
+        }
+    },
+
+    xAxis: {
+        labels:{
+        enabled:false,
+        },
+        type: 'datetime',
+        tickPixelInterval: 150
+    },
+
+    yAxis: {
+        title: {
+            text: '',
+            type: 'int'
+        },
+        allowDecimals:false,
+        labels:{
+            style: {
+                color:'#6cf',
+                fontSize:24,
+                fontFamily:'Torus'
+            }
+        },
+        plotLines: [{
+            value: 70,
+            width: 1,
+            color: '#808080',
+        }]
+    },
+
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+    },
+
+    legend: {
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Hr_init',
+        data: (function () {
+            var data = [],
+                time = (new Date()).getTime(),
+                i;
+
+            for (i = -80; i <= 0; i += 1) {
+                data.push({
+                    x: time + i * 1000,
+                    y: NaN
+                });
+            }
+            return data;
+        }())
+    }]
+});
+		</script>
+	</body>
+</html>
