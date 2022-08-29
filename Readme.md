@@ -4,6 +4,7 @@ Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 
 ## Running
 
+1. Clone this repo or Download Zip.
 1. Open /HRMonitor/HeartRate.exe.
 2. Right click, Edit settings xml.
 3. Find `<UDP>` Things. Fill it with "127.0.0.1:8909", like this:
