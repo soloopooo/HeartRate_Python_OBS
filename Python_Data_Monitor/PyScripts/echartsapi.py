@@ -1,37 +1,13 @@
-
-import contextlib
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 import time
 from fastapi.middleware.cors import CORSMiddleware
-import socket
+from udpconnection import udp_conn
 from multiprocessing import Process, shared_memory
 import re
   
-
-def udp_conn(ip:str,port:int) -> None:
-    dat = shared_memory.SharedMemory(name='udpData',create=True,size = 8192)
-    dat_buf = dat.buf
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    addr = (ip,port)
-    udp_socket.bind(addr)
-    udp_socket.settimeout(3)
-    while True:
-        try:
-            recv_data, client_addr = udp_socket.recvfrom(1024)
-            length = len(recv_data)
-            dat_buf[0:length] = recv_data
-        except Exception:
-            pass
-        except KeyboardInterrupt:
-            break
-        except:
-            pass
-        #udp_socket.close()
-    #print ("{:s} <- {:s}".format(recv_data.decode('utf-8'), str(client_addr)))
 
 app = FastAPI()
 app.add_middleware(
@@ -60,26 +36,13 @@ def hr_js():
     if leng>5:
         leng=5 # Prevent OutIndex.
     try:
-        while i<5:
+        while i<leng:
             ddict[k_l[i+1]]=dlist[i]
             i+=1
     except Exception:
         i = 0
     return ddict
-'''
-@app.get("/",response_class=HTMLResponse)
-def main():
-    html_main = open('www\\index.html','r').read()
-    return html_main
-@app.get("/speedometer",response_class=HTMLResponse)
-def speedo():
-    html_speedo = open('www\\speedometer.html','r').read()
-    return html_speedo
-@app.get("/spline",response_class=HTMLResponse)
-def spline():
-    html_spline = open('www\\spline.html','r').read()
-    return html_spline
-'''
+
 app.mount("/js", StaticFiles(directory="www\\js"), name="js")
 app.mount("/", StaticFiles(directory="www\\html",html=True), name="html")
 

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Highcharts Example</title>
+
+    <style type="text/css">
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 320px;
+            max-width: 1300px;
+            height: 100%;
+            margin: 1em auto;
+        }
+
+        #container {
+            height: 100%;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ebebeb;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td,
+        .highcharts-data-table th,
+        .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr,
+        .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/highcharts.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/highcharts-more.js"></script>
+    <script src="js/solid-gauge.js"></script>
+
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+
+
+
+    <script type="text/javascript">
+        Highcharts.setOptions( {
+            chart: {
+                type: 'solidgauge',
+                backgroundColor: 'rgba(255, 255, 255, 0)',
+                plotBorderColor: null,
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+            },
+            title:null,
+            pane:{
+                center: ['50%', '85%'],
+                size: '140%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                },
+
+            },
+            yAxis: {
+                stops: [
+                    [0.2, '#55BF3B'], // green
+                    [0.55, '#DDDF0D'], // yellow
+                    [0.85, '#DF5353'] // red
+                ],
+                lineWidth: 0,
+                minorTickInterval: null,
+                tickInterval: 0,
+                tickWidth: 0,
+                title: {
+                    y: -70
+                },
+                labels: {
+                    y: 33
+                }
+            },
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true
+                    }
+                }
+            }
+        });
+        var chart1 = Highcharts.chart('container', {
+            title:null,
+            yAxis: {
+                min: 60,
+                max: 160,
+                title: {
+                    text: 'BPM'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip:{
+                enabled:false
+            },
+            series: [{
+                name: 'BPM',
+                data: [NaN],
+                dataLabels: {
+                    format: '<div style="text-align:center"><span style="font-family:Torus;font-size:105px;color:' +
+                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || '#66ccff') + '">{y}</span><br/>' +
+                        '<span style="font-size:38px;color:white">BPM</span></div>'
+                },
+                tooltip: {
+                    valueSuffix: ' BPM'
+                }
+            }]
+        });
+
+        if ('WebSocket' in window) {
+            var ws = new WebSocket('ws://127.0.0.1:8919/ws/hr_json');
+        }
+        else {
+            alert ('Your browser doesn\'t support websocket, please use api mode instead!')
+        }
+        function reconnect(){
+            setTimeout(function(){
+                var ws = new WebSocket('ws://127.0.0.1:8919/ws/hr_json');
+                ws.onclose = function () {
+                    console.warn('Connection closed. Reconnecting.')
+                    reconnect()
+                  };
+                  ws.onerror = function () {
+                    console.error('Connection failed. Reconnecting.')
+                    reconnect()
+                  };
+            },2000)
+        }
+        ws.onopen = function(){
+            //HeartBeat
+            setInterval(function(){
+                ws.send('heartbeat');
+                console.log('Websocket heartbeat')
+            },2000);
+        };
+        var i = 0;
+        ws.onmessage = function(json){
+            i=i+1;
+            data= $.parseJSON(json.data);
+            hr_bpm=data.hr;
+            point=chart1.series[0].points[0];
+            if (i % 5 == 0){
+                var val = parseInt(hr_bpm);
+                console.log(hr_bpm);
+                point.update(val);
+            };
+            if(i>20000){
+                i=0;
+            };
+        };
+
+        ws.onclose = function(){
+            console.warn('Connection closed. Reconnecting.')
+            reconnect()
+        };
+
+        ws.onerror = function(){
+            console.error('Connection failed. Reconnecting.')
+            reconnect()
+        };
+
+    </script>
+</body>
+
+</html>

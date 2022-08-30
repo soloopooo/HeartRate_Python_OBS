@@ -1,1 +1,1 @@
-cd "Python_Data_Monitor\PyScripts" & "..\..\Python_Data_Monitor/3104venv/Scripts/python.exe" echartsapi.py
+cd "Python_Data_Monitor\PyScripts" & "..\..\Python_Data_Monitor/3104venv/Scripts/python.exe" websocket.py
