@@ -20,6 +20,8 @@ Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 4. Run Start.bat.
 5. Open http://127.0.0.1:8919.
 
+** Recommend using WebSocket than Js API. **
+
 All Right.
 
 ## How to make your own visualble html:
@@ -34,4 +36,7 @@ Open http://127.0.0.1:8919/{yourhtmlname}.html to see it.
 
 ## Asking for help
 
-Maybe we can use websocket?
+<s>Maybe we can use websocket?</s>
+
+Finished...?
+
