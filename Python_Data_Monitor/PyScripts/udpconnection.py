@@ -15,8 +15,8 @@ def udp_conn(ip:str,port:int) -> None:
             length = len(recv_data)
             dat_buf[0:length] = recv_data
         except Exception:
-            length = len('_,failed,_,_,0\n')
-            dat_buf[0:length] = b'_,failed,0,,"0"\n'
+            length = len(b'_,failed,_,_,0\n')
+            dat_buf[0:length+1] = b'_,failed,0,,"0"\n'
             pass
         except KeyboardInterrupt:
             break
