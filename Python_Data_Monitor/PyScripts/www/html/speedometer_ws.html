@@ -61,6 +61,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/highcharts-more.js"></script>
     <script src="js/solid-gauge.js"></script>
+    <script src="js/reconnectingWebSockets.js"></script>
 
 
     <figure class="highcharts-figure">
@@ -70,7 +71,7 @@
 
 
     <script type="text/javascript">
-        Highcharts.setOptions( {
+        Highcharts.setOptions({
             chart: {
                 type: 'solidgauge',
                 backgroundColor: 'rgba(255, 255, 255, 0)',
@@ -82,8 +83,8 @@
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
             },
-            title:null,
-            pane:{
+            title: null,
+            pane: {
                 center: ['50%', '85%'],
                 size: '140%',
                 startAngle: -90,
@@ -124,7 +125,7 @@
             }
         });
         var chart1 = Highcharts.chart('container', {
-            title:null,
+            title: null,
             yAxis: {
                 min: 60,
                 max: 160,
@@ -135,8 +136,8 @@
             credits: {
                 enabled: false
             },
-            tooltip:{
-                enabled:false
+            tooltip: {
+                enabled: false
             },
             series: [{
                 name: 'BPM',
@@ -152,56 +153,50 @@
             }]
         });
 
+        var lockReconnect;
+        var timeConnect = 0
         if ('WebSocket' in window) {
-            var ws = new WebSocket('ws://127.0.0.1:8919/ws/hr_json');
+            // https://github.com/joewalnes/reconnecting-websocket/
+            var ws = new ReconnectingWebSocket('ws://127.0.0.1:8919/ws/hr_json');
         }
         else {
-            alert ('Your browser doesn\'t support websocket, please use api mode instead!')
+            alert('Your browser doesn\'t support websocket, please use api mode instead!')
         }
-        function reconnect(){
-            setTimeout(function(){
-                var ws = new WebSocket('ws://127.0.0.1:8919/ws/hr_json');
-                ws.onclose = function () {
-                    console.warn('Connection closed. Reconnecting.')
-                    reconnect()
-                  };
-                  ws.onerror = function () {
-                    console.error('Connection failed. Reconnecting.')
-                    reconnect()
-                  };
-            },2000)
-        }
-        ws.onopen = function(){
+
+        ws.onopen = function () {
             //HeartBeat
-            setInterval(function(){
-                ws.send('heartbeat');
-                console.log('Websocket heartbeat')
-            },2000);
+            try {
+                setInterval(function () {
+                    ws.send('heartbeat');
+                    console.log('Websocket heartbeat')
+                }, 2000);
+            }
+            catch (error) {
+                console.error(error)
+            }
         };
         var i = 0;
-        ws.onmessage = function(json){
-            i=i+1;
-            data= $.parseJSON(json.data);
-            hr_bpm=data.hr;
-            point=chart1.series[0].points[0];
-            if (i % 5 == 0){
+        ws.onmessage = function (json) {
+            i = i + 1;
+            data = $.parseJSON(json.data);
+            hr_bpm = data.hr;
+            point = chart1.series[0].points[0];
+            if (i % 5 == 0) {
                 var val = parseInt(hr_bpm);
                 console.log(hr_bpm);
                 point.update(val);
             };
-            if(i>20000){
-                i=0;
+            if (i > 20000) {
+                i = 0;
             };
         };
 
-        ws.onclose = function(){
-            console.warn('Connection closed. Reconnecting.')
-            reconnect()
+        ws.onclose = function () {
+            console.warn('Connection closed. Reconnecting.');
         };
 
-        ws.onerror = function(){
-            console.error('Connection failed. Reconnecting.')
-            reconnect()
+        ws.onerror = function () {
+            console.error('Connection failed. Reconnecting.');
         };
 
     </script>
