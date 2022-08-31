@@ -40,3 +40,8 @@ Open http://127.0.0.1:8919/{yourhtmlname}.html to see it.
 
 Finished...?
 
+## Open Source Software used in this software:
+
+1. [HighCharts](https://github.com/highcharts/highcharts)
+2. [jlennox/Heartrate](https://github.com/jlennox/HeartRate)
+3. [Reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket)
