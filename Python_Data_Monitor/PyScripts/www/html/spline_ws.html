@@ -7,16 +7,28 @@
     <title>Highcharts Example</title>
 
     <style type="text/css">
+       html, body {
+           height: auto;
+         }
+         
         .highcharts-figure,
         .highcharts-data-table table {
             min-width: 320px;
-            max-width: 1300px;
-            height: 100%;
-            margin: 1em auto;
+            min-height:10px;
+            margin: 1em auto
         }
-
         #container {
-            height: 100%;
+            display: block;
+            position:absolute;
+            height:auto;
+            bottom:0;
+            top:0;
+            left:0;
+            right:0;
+            margin-top:2px;
+            margin-bottom:2px;
+            margin-right:5px;
+            margin-left:5px;
         }
 
         .highcharts-data-table table {
@@ -61,14 +73,14 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/reconnectingWebSockets.js"></script>
 
-    <figure class="highcharts-figure">
+    <figure class="highcharts-figure" style="height:100%">
         <div id="container"></div>
     </figure>
 
 
 
     <script type="text/javascript">
-        Highcharts.chart('container', {
+        var chart = Highcharts.chart('container', {
             plotOptions: {
                 series: {
                     lineWidth: 3.3,
@@ -81,7 +93,6 @@
                 type: 'spline',
                 renderTo: name,
                 backgroundColor: 'rgba(255, 255, 255, 0)',
-                height: '85px',
                 plotBorderColor: null,
                 plotBackgroundColor: null,
                 plotBackgroundImage: null,
@@ -94,7 +105,7 @@
                         var hr_bpm;
                         var i = 0;
                         var lockReconnect;
-                        var timeConnect = 0
+                        var timeConnect = 0;
                         // set up the updating of the chart each second
                         var series = this.series[0];
                         if ('WebSocket' in window) {
@@ -228,6 +239,9 @@
                 }())
             }]
         });
+	
+       window.onresize() = function(){
+	chart.reflow();}
     </script>
 </body>
 
