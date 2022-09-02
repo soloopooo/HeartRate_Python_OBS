@@ -73,56 +73,91 @@
     <script type="text/javascript">
         Highcharts.setOptions({
             chart: {
-                type: 'solidgauge',
+                type: 'gauge',
                 backgroundColor: 'rgba(255, 255, 255, 0)',
-                plotBorderColor: null,
                 plotBackgroundColor: null,
                 plotBackgroundImage: null,
-                plotBorderWidth: null,
+                plotBorderWidth: 0,
                 plotShadow: false,
-                animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
             },
             title: null,
             pane: {
-                center: ['50%', '85%'],
-                size: '140%',
-                startAngle: -90,
-                endAngle: 90,
-                background: {
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
-                    innerRadius: '60%',
-                    outerRadius: '100%',
-                    shape: 'arc'
-                },
+                startAngle: -130,
+                endAngle: 130,
+                background: [{
+                    backgroundColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                        stops: [
+                            [0, '#FFF'],
+                            [1, '#333']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '109%'
+                }, {
+                    backgroundColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                        stops: [
+                            [0, '#333'],
+                            [1, '#FFF']
+                        ]
+                    },
+                    borderWidth: 1,
+                    outerRadius: '107%'
+                }, {
+                    // default background
+                }, {
+                    backgroundColor: '#DDD',
+                    borderWidth: 0,
+                    outerRadius: '105%',
+                    innerRadius: '103%'
+                }]
 
             },
             yAxis: {
-                stops: [
-                    [0.2, '#55BF3B'], // green
-                    [0.55, '#DDDF0D'], // yellow
-                    [0.85, '#DF5353'] // red
-                ],
-                lineWidth: 0,
-                minorTickInterval: null,
-                tickInterval: 0,
-                tickWidth: 0,
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 10,
+                tickColor: '#666',
                 title: {
-                    y: -70
+                    y: -7
                 },
                 labels: {
-                    y: 33
-                }
+                    step: 2,
+			        rotation: 'auto'
+                },
+                plotBands: [{
+                    from: 60,
+                    to: 90,
+                    color: '#55BF3B' // green
+                }, {
+                    from: 90,
+                    to: 120,
+                    color: '#DDDF0D' // yellow
+                }, {
+                    from: 120,
+                    to: 160,
+                    color: '#DF5353' // red
+                }],
+                
             },
             plotOptions: {
-                solidgauge: {
+                gauge: {
                     dataLabels: {
-                        y: 5,
+                        y: 22,
                         borderWidth: 0,
                         useHTML: true
                     }
                 }
-            }
+            },
+            
+            
         });
         var chart1 = Highcharts.chart('container', {
             title: null,
@@ -143,8 +178,8 @@
                 name: 'BPM',
                 data: [NaN],
                 dataLabels: {
-                    format: '<div style="text-align:center"><span style="font-family:Torus;font-size:105px;color:' +
-                        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || '#66ccff') + '">{y}</span><br/>' +
+                    format: '<div style="text-align:center"><span style="font-family:Torus;font-size:75px;color:' +
+                         '#66ccff' + '">{y}</span><br/>' +
                         '<span style="font-size:38px;color:white">BPM</span></div>'
                 },
                 tooltip: {

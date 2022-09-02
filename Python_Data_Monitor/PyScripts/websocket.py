@@ -1,6 +1,4 @@
 import asyncio
-import json
-from typing import List
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 import uvicorn
