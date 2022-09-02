@@ -81,6 +81,9 @@
                 plotShadow: false,
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
+                animation:{
+                    duration: 50,
+                },
             },
             title:null,
             pane:{
@@ -120,6 +123,9 @@
                         borderWidth: 0,
                         useHTML: true
                     }
+                },
+                series:{
+                    animation:false
                 }
             }
         });

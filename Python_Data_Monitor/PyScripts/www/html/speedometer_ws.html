@@ -82,6 +82,9 @@
                 plotShadow: false,
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
+                animation:{
+                    duration: 200,
+                }
             },
             title: null,
             pane: {
@@ -95,7 +98,6 @@
                     outerRadius: '100%',
                     shape: 'arc'
                 },
-
             },
             yAxis: {
                 stops: [
@@ -121,6 +123,9 @@
                         borderWidth: 0,
                         useHTML: true
                     }
+                },
+                series: {
+                    animation: false
                 }
             }
         });

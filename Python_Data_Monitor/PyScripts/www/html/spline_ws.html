@@ -86,8 +86,10 @@
                     lineWidth: 3.3,
                     marker: {
                         radius: 3.0,
-                    }
+                    },
+                    animation: false
                 }
+
             },
             chart: {
                 type: 'spline',
@@ -100,6 +102,9 @@
                 plotShadow: false,
                 animation: Highcharts.svg, // don't animate in old IE
                 marginRight: 10,
+                animation:{
+                    duration: 250,
+                },
                 events: {
                     load: function () {
                         var hr_bpm;
