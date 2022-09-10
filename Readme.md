@@ -26,13 +26,30 @@ All Right.
 
 ## How to make your own visualble html:
 
-Write your html in `Pyscripts/www`. The api is http://127.0.0.1:8919/api/hr_json.
+Write your html in `Pyscripts/www`. 
+
+Recommend to use websocket, which is ws://127.0.0.1/ws/hr_json.
+
+If you use legacy api mode, The api is http://127.0.0.1:8919/api/hr_json.
 
 You can add js files in `Pyscripts/js`.
 
 These file will be automatically mounted while the server runs.
 
 Open http://127.0.0.1:8919/{yourhtmlname}.html to see it.
+
+## How can I test the web if I don't have a compatible Heartrate device?
+
+Easy. 
+
+Instead of running `Heartrate.exe`, just run `test.bat`.
+
+It will send random data to UDP port, then run `start.bat` and open the url.
+
+Gif:
+
+![5wec2-ge0kv](https://user-images.githubusercontent.com/36123081/189464877-2ba3af54-a36d-4c26-b3f0-7f31150c8aa6.gif)
+
 
 ## Asking for help
 
