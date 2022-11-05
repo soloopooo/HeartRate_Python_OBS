@@ -16,7 +16,13 @@
   <UDP>127.0.0.1:8909</UDP>
 </HeartRateSettingsProtocol>
 ```
-4. 将 `Python_Data_Monitor\3104venv.7z` 解压到 `Python_Data_Monitor`。
+4. 第一次配置，请运行如下命令:(推荐Powershell)
+```bash
+cd .\Python_Data_Monitor\
+python -m venv .\3104venv\
+.\3104venv\Scripts\activate
+python -m pip install -r .\PyScripts\requirements.txt
+```
 4. 双击 start.bat 运行。
 5. 浏览器打开 http://127.0.0.1:8919。
 
