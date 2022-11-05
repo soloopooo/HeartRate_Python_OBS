@@ -6,6 +6,7 @@ Thanks to [jlennox/Heartrate](https://github.com/jlennox/HeartRate).
 
 ## Running
 
+0. Install Python 3.10 at python.org if you don't have Python installed.
 1. Clone this repo or Download Zip.
 1. Open /HRMonitor/HeartRate.exe.
 2. Right click, Edit settings xml.
